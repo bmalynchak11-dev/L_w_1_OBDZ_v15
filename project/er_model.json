@@ -1,5 +1,93 @@
 {
-  "entities": {},
-  "relationships": [],
-  "hierarchies": []
+  "entities": {
+    "APP_USER": [
+      {"type": "int", "name": "id", "keys": ["PK"]},
+      {"type": "string", "name": "email", "keys": ["UK"]},
+      {"type": "string", "name": "password_hash", "keys": []},
+      {"type": "composite", "name": "full_name", "keys": [], "parts": [
+        {"type": "string", "name": "first_name"},
+        {"type": "string", "name": "last_name"}
+      ]}
+    ],
+    "PROFILE": [
+      {"type": "int", "name": "id", "keys": ["PK"]},
+      {"type": "string", "name": "default_currency", "keys": []},
+      {"type": "string", "name": "locale", "keys": ["OPT"]}
+    ],
+    "ACCOUNT": [
+      {"type": "int", "name": "id", "keys": ["PK"]},
+      {"type": "string", "name": "name", "keys": []},
+      {"type": "decimal", "name": "balance", "keys": []}
+    ],
+    "CATEGORY": [
+      {"type": "int", "name": "id", "keys": ["PK"]},
+      {"type": "string", "name": "title", "keys": []},
+      {"type": "string", "name": "kind", "keys": []}
+    ],
+    "TRANSACTION": [
+      {"type": "int", "name": "id", "keys": ["PK"]},
+      {"type": "decimal", "name": "amount", "keys": []},
+      {"type": "timestamp", "name": "transacted_at", "keys": []},
+      {"type": "text", "name": "note", "keys": ["OPT"]}
+    ],
+    "TAG": [
+      {"type": "int", "name": "id", "keys": ["PK"]},
+      {"type": "string", "name": "name", "keys": ["UK"]}
+    ],
+    "RECEIPT_ITEM": [
+      {"type": "int", "name": "item_no", "keys": ["PK"]},
+      {"type": "string", "name": "item_name", "keys": []},
+      {"type": "decimal", "name": "price", "keys": []}
+    ]
+  },
+  "relationships": [
+    {
+      "a": "APP_USER",
+      "b": "PROFILE",
+      "a_card": "one",
+      "b_card": "one",
+      "identifying": false,
+      "label": "має профіль налаштувань"
+    },
+    {
+      "a": "APP_USER",
+      "b": "ACCOUNT",
+      "a_card": "one",
+      "b_card": "zero_many",
+      "identifying": false,
+      "label": "володіє фінансовими рахунками"
+    },
+    {
+      "a": "ACCOUNT",
+      "b": "TRANSACTION",
+      "a_card": "one",
+      "b_card": "zero_many",
+      "identifying": false,
+      "label": "містить грошові операції"
+    },
+    {
+      "a": "CATEGORY",
+      "b": "TRANSACTION",
+      "a_card": "zero_one",
+      "b_card": "zero_many",
+      "identifying": false,
+      "label": "класифікує операцію"
+    },
+    {
+      "a": "TRANSACTION",
+      "b": "TAG",
+      "a_card": "zero_many",
+      "b_card": "zero_many",
+      "identifying": false,
+      "label": "позначається мітками"
+    },
+    {
+      "a": "TRANSACTION",
+      "b": "RECEIPT_ITEM",
+      "a_card": "one",
+      "b_card": "zero_many",
+      "identifying": true,
+      "label": "розбивається на позиції чека"
+    }
+  ]
 }
